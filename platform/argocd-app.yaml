@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-first-gitops-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    # Target your specific repository
+    repoURL: https://github.com/manunair079/my-gitops-demo.git
+    targetRevision: HEAD
+    path: apps   # ArgoCD will monitor everything inside the apps/ folder
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true      # Deletes resources from K8s if you delete them from Git
+      selfHeal: true   # Automatically overwrites manual terminal overrides
